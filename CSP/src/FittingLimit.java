@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class FittingLimit extends Constraint {
     int minItems;
     int maxItems;
@@ -8,10 +10,13 @@ public class FittingLimit extends Constraint {
         this.maxItems = Integer.parseInt(maxItems);
     }
 
-    public boolean isValid(State currentState){
-        boolean isValid = false;
-        //TODO make sure that each bag has more than *minItems and less than Max items
-        // TODO check if its more than min or if it can be equal
-        return  isValid;
+    public boolean isValid(State currentState){      
+        HashMap<Character, String> bags = currentState.getBags();
+        
+        for (String items : bags.values()) {
+        	if (items.length() < this.minItems || items.length() > this.maxItems) return false;
+        }
+        
+        return true;
     }
 }

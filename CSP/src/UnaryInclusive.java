@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 public class UnaryInclusive extends Constraint {
     char item;
     String bagNames;
@@ -8,7 +10,12 @@ public class UnaryInclusive extends Constraint {
     }
 
     public boolean isValid(State currentState){
-        // checks if the item from this class and it has to be in one of the bags (bagNames) in the current state
+        if(currentState.getUnassignedItems().indexOf(this.item) != -1) return false;
+        
+        for(char bag:this.bagNames.toCharArray()) {
+        	if(currentState.getBags().get(bag).indexOf(this.item) != -1) return true; 
+        }
+    	
     	return false;
     }
 }

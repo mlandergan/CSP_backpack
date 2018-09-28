@@ -8,13 +8,52 @@ import java.util.HashMap;
 
 public class CSP_ACML {
 		
-	HashMap<Character, Integer> items;
-	HashMap<Character, Integer> bags;
+	HashMap<Character, Integer> itemWeights;
+	HashMap<Character, Integer> bagCapacities;
 
 	ArrayList<Constraint> constraints;
 	
 	
 	private boolean findSolution() {
+		
+	    //String allItems = getItemString();
+		//HashMap<Character, String> emptyBags = getEmptyBags();
+		//State initialState = new State(emptyBags, allItems);
+		
+		String allItems = getItemString();
+		HashMap<Character, String> testBags = new HashMap<Character, String>();
+		
+		HashMap<Character, Integer> testWeights = new HashMap<Character, Integer>();
+		HashMap<Character, Integer> testCapacities = new HashMap<Character, Integer>();
+		
+		testWeights.put('A', 95);
+		testWeights.put('B', 6);
+		testWeights.put('C', 1);
+		
+		testCapacities.put('x', 3);
+		testCapacities.put('y', 7);
+		testCapacities.put('z', 100);
+
+		
+		testBags.put('z', "C");
+		testBags.put('y', "B");
+		//testBags.put('z', "C");
+		testBags.put('x', "");
+
+		State testState = new State(testBags, "");
+		//FittingLimit fl = new FittingLimit("1", "3");
+		//WeightLimit wl = new WeightLimit();
+		// char item, String bagNames
+		//  UnaryInclusive ui = new UnaryInclusive('A', "zy");
+		// UnaryInclusive ui = new UnaryInclusive('A', "x"); // false
+		// UnaryExclusive ue = new UnaryExclusive('A', "xz");
+		//BinaryNotEquals be = new BinaryNotEquals('A', 'B');
+		MutualInclusive mi = new MutualInclusive('A', 'B','y','x');
+		boolean valid = mi.isValid(testState);
+		
+		//boolean valid = wl.isValid(testState, testWeights, testCapacities);
+		System.out.println(valid);
+		
 		return false;
 	}
 	
@@ -34,8 +73,8 @@ public class CSP_ACML {
 		//ArrayList<Bag> bags = new ArrayList<Bag>();
 
 		
-		items = new HashMap<Character, Integer>();
-		bags = new HashMap<Character, Integer>();
+		itemWeights = new HashMap<Character, Integer>();
+		bagCapacities = new HashMap<Character, Integer>();
 
 		constraints = new ArrayList<Constraint>();
 		constraints.add(new WeightLimit());
@@ -53,10 +92,10 @@ public class CSP_ACML {
 				
 				switch(section_number) {
 				case 1: // Item Assignment
-					items.put(lineArgs[0].charAt(0), Integer.parseInt(lineArgs[1]));
+					itemWeights.put(lineArgs[0].charAt(0), Integer.parseInt(lineArgs[1]));
 					break;
 				case 2: // Bag Assignment
-					bags.put(lineArgs[0].charAt(0), Integer.parseInt(lineArgs[1]));
+					bagCapacities.put(lineArgs[0].charAt(0), Integer.parseInt(lineArgs[1]));
 					break;
 				case 3: // Fitting Limits
 					constraints.add(new FittingLimit(lineArgs[0], lineArgs[1]));
@@ -95,6 +134,22 @@ public class CSP_ACML {
 		}
 		
 		return 1;
+	}
+	
+	private HashMap<Character, String> getEmptyBags() {
+		HashMap<Character, String> emptyBags = new HashMap<Character, String>();
+		for (char c : this.bagCapacities.keySet()) {
+			emptyBags.put(c, "");
+		}
+		return emptyBags;
+	}
+	
+	private String getItemString() {
+		String items = "";
+		for (char c : this.itemWeights.keySet()) {
+			items += c;
+		}
+		return items;
 	}
 	
 	public static void main(String[] args)

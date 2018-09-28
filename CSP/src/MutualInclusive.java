@@ -12,8 +12,7 @@ public class MutualInclusive extends Constraint {
     }
 
     public boolean isValid(State currentState){
-        boolean isValid = false;
-        // TODO Items have to be in different bags. But they have to be in the bags (XOR)
-        return isValid;
+    	return (((currentState.getBags().get(bag1).indexOf(item1) != -1) && (currentState.getBags().get(bag2).indexOf(item2) != -1)) || 
+    			((currentState.getBags().get(bag1).indexOf(item2) != -1) && (currentState.getBags().get(bag2).indexOf(item1) != -1)));
     }
 }

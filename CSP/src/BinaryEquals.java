@@ -8,9 +8,13 @@ public class BinaryEquals extends Constraint {
     }
 
     public boolean isValid(State currentState){
-        boolean isValid = false;
-        // TODO checks to see if the two items are in the same bag. True if they are, False if they aren't
-        return  isValid;
+        if(currentState.getUnassignedItems().indexOf(item1) != -1 || currentState.getUnassignedItems().indexOf(item2) != -1 ) return false;
+        
+        for(String items: currentState.getBags().values()) {
+        	if((items.indexOf(item1) != -1) && (items.indexOf(item2) != -1)) return true;
+        }
+        
+        return  false;
     }
 
 }

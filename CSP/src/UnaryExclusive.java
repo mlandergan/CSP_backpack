@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class UnaryExclusive extends Constraint {
     char item;
     String bagNames;
@@ -10,9 +8,13 @@ public class UnaryExclusive extends Constraint {
     }
 
     public boolean isValid(State currentState){
-        boolean isValid = false;
-        // TODO checks that the item from this class, is not in one of the bags (bagNames) in the current state
-        return  isValid;
+        if(currentState.getUnassignedItems().indexOf(this.item) != -1) return true;
+        
+        for(char bag:this.bagNames.toCharArray()) {
+        	if(currentState.getBags().get(bag).indexOf(this.item) != -1) return false; 
+        }
+    	
+    	return true;
     }
 }
 
