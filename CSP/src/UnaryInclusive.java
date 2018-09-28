@@ -1,10 +1,8 @@
-import java.util.ArrayList;
-
 public class UnaryInclusive extends Constraint {
-    String item;
-    ArrayList<String> bagNames;
+    char item;
+    String bagNames;
 
-    public UnaryInclusive(String item, ArrayList<String> bagNames){
+    public UnaryInclusive(char item, String bagNames){
         this.item = item;
         this.bagNames = bagNames;
     }

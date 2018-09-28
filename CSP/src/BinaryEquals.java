@@ -1,8 +1,8 @@
 public class BinaryEquals extends Constraint {
-    Item item1;
-    Item item2;
+    char item1;
+    char item2;
 
-    public BinaryEquals(Item item1, Item item2){
+    public BinaryEquals(char item1, char item2){
         this.item1 = item1;
         this.item2 = item2;
     }

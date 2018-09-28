@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 public class UnaryExclusive extends Constraint {
-    Item item;
-    ArrayList<String> bagNames;
+    char item;
+    String bagNames;
 
-    public UnaryExclusive(Item item, ArrayList<String> bagNames){
+    public UnaryExclusive(char item, String bagNames){
         this.item = item;
         this.bagNames = bagNames;
     }

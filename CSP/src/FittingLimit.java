@@ -1,13 +1,9 @@
 public class FittingLimit extends Constraint {
     int minItems;
     int maxItems;
-
-    public FittingLimit(int minItems, int maxItems){
-        this.minItems = minItems;
-        this.maxItems = maxItems;
-    }
     
     public FittingLimit(String minItems, String maxItems){
+
         this.minItems = Integer.parseInt(minItems);
         this.maxItems = Integer.parseInt(maxItems);
     }
