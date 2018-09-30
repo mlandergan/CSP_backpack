@@ -19,16 +19,12 @@ public class FittingLimit extends Constraint {
         return true;
     }
 
-    public boolean isValid(State currentState){      
-    	
-    	// if (currentState.getUnassignedItems().length() > 0) return true;
-    	
+    public boolean isValid(State currentState){          	
         HashMap<Character, String> bags = currentState.getBags();
         
         for (String items : bags.values()) {
         	if (items.length() < this.minItems || items.length() > this.maxItems) return false;
-        }
-        
+        }     
         return true;
     }
 }

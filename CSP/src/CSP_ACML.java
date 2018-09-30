@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,13 +49,6 @@ public class CSP_ACML {
     }
     
     public boolean constraintsValid(State currentState) {
-    	if (currentState.getBags().get('a').contains(Character.toString('A')) && 
-    		currentState.getBags().get('b').contains(Character.toString('B')) && 
-    		currentState.getBags().get('b').contains(Character.toString('C')) && 
-    		currentState.getBags().get('b').contains(Character.toString('D'))) 
-    	{
-    		System.out.println("Found");
-    	}
     	for(Constraint c: this.constraints) {
     		if(!c.isValid(currentState)) return false;
     	}
@@ -61,13 +56,6 @@ public class CSP_ACML {
     }
      
     public boolean constraintsSatisfiable(State currentState) {
-	if (currentState.getBags().get('a').contains(Character.toString('A')) && 
-    		currentState.getBags().get('b').contains(Character.toString('B')) && 
-    		currentState.getBags().get('b').contains(Character.toString('C')) && 
-    		currentState.getBags().get('b').contains(Character.toString('D'))) 
-    	{
-    		System.out.println("Found");
-    	}
     	for(Constraint c: this.constraints) {
     		if(!c.isSatisfiable(currentState)) return false;
     	}
@@ -174,6 +162,13 @@ public class CSP_ACML {
 			return 0;
 		}
 		
+		if (br != null)
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
 		return 1;
 	}
 	
@@ -193,6 +188,50 @@ public class CSP_ACML {
 		return items;
 	}
 	
+	private void saveOutput(State solution, String filename) {
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+		
+		WeightLimit wl = new WeightLimit(this.itemWeights, this.bagCapacities);
+		try {
+			fw = new FileWriter(filename);
+			bw = new BufferedWriter(fw);
+			
+			if (solution == null) {
+				bw.write("no solution");
+				return;
+			}
+			
+			for (char bag : solution.getBags().keySet()) {
+				String contents = Character.toString(bag);
+				for (char item : solution.getBags().get(bag).toCharArray()) {
+					contents += " " + item;
+				}
+				bw.write(contents);
+				bw.newLine();
+				bw.write(String.format("number of items: %d", solution.getBags().get(bag).length()));
+				bw.newLine();
+				int weight = wl.getCurrentWeight(solution.getBags().get(bag));
+				int capacity = this.bagCapacities.get(bag);
+				bw.write(String.format("total weight: %d/%d", weight, capacity));
+				bw.newLine();
+				bw.write(String.format("wasted capacity: %d", capacity - weight));
+				bw.newLine();
+				bw.newLine();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null) bw.close();
+				if (fw != null) fw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void main(String[] args)
 	{	
 		String output_file = args[1];
@@ -201,8 +240,8 @@ public class CSP_ACML {
 		int res = csp.loadFile(args[0]);
 		if (res == 0) return;
 		
-		State solution = csp.findSolution();
-		
+		State solution = csp.findSolution();	
+		csp.saveOutput(solution, output_file);
 		return;
 	}
 }

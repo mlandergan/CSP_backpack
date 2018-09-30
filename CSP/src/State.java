@@ -29,6 +29,14 @@ public class State {
     	this.bags.replace(bag, this.bags.get(bag).replace(Character.toString(item), ""));
     	return true;
     }
+	
+    public boolean bagContains(char bag, char item) {
+    	return this.bags.get(bag).contains(Character.toString(item));
+    }
+    
+    public boolean itemUnassigned(char item) {
+    	return this.unassignedItems.contains(Character.toString(item));
+    }
   
     public HashMap<Character, String> getBags() { return this.bags; }
     
