@@ -6,6 +6,13 @@ public class BinaryNotEquals extends Constraint {
         this.item1 = item1;
         this.item2 = item2;
     }
+    
+    public boolean isSatisfiable(State currentState){        
+        for(String items: currentState.getBags().values()) {
+        	if((items.indexOf(item1) != -1) && (items.indexOf(item2) != -1)) return false;
+        } 
+       return  true;
+    }
 
     public boolean isValid(State currentState){
         if(currentState.getUnassignedItems().indexOf(item1) != -1 || currentState.getUnassignedItems().indexOf(item2) != -1 ) return true;

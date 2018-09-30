@@ -14,47 +14,55 @@ public class CSP_ACML {
 	ArrayList<Constraint> constraints;
 	
 	
+	//private State backTracking(State currentState) {
+		// check valid solution 
+			// call constraintsValid method
+		// forward checking (keep track of assigned variables
+		// nextStates from member function
+		// call backTracking return solution or NULL
+		
+	//}
+	
+    public ArrayList<State> nextStates(State currentState){
+    	// assign an item to the bag if constraints are valid
+    	ArrayList<State> nextStates = new ArrayList<State>();
+    	for(Character b: currentState.getBags().keySet()) {
+    		for(Character c: currentState.getUnassignedItems().toCharArray()) {
+    			State currCopy = new State(currentState);
+    			currCopy.addItem(b, c);
+    			
+    			if (constraintsSatisfiable(currCopy)) {
+    				nextStates.add(currCopy);
+    			}
+    		}
+    	}
+    	return nextStates;
+    }
+    
+    public boolean constraintsValid(State currentState) {
+    	for(Constraint c: this.constraints) {
+    		if(!c.isValid(currentState)) return false;
+    	}
+    	return true;
+    }
+     
+    public boolean constraintsSatisfiable(State currentState) {
+    	for(Constraint c: this.constraints) {
+    		if(!c.isSatisfiable(currentState)) return false;
+    	}
+    	return true;
+    }
+	
 	private boolean findSolution() {
 		
-	    //String allItems = getItemString();
-		//HashMap<Character, String> emptyBags = getEmptyBags();
-		//State initialState = new State(emptyBags, allItems);
+	    String allItems = getItemString();
+		HashMap<Character, String> emptyBags = getEmptyBags();
+		State initialState = new State(emptyBags, allItems);
 		
-		String allItems = getItemString();
-		HashMap<Character, String> testBags = new HashMap<Character, String>();
-		
-		HashMap<Character, Integer> testWeights = new HashMap<Character, Integer>();
-		HashMap<Character, Integer> testCapacities = new HashMap<Character, Integer>();
-		
-		testWeights.put('A', 95);
-		testWeights.put('B', 6);
-		testWeights.put('C', 1);
-		
-		testCapacities.put('x', 3);
-		testCapacities.put('y', 7);
-		testCapacities.put('z', 100);
-
-		
-		testBags.put('z', "C");
-		testBags.put('y', "B");
-		//testBags.put('z', "C");
-		testBags.put('x', "");
-
-		State testState = new State(testBags, "");
-		//FittingLimit fl = new FittingLimit("1", "3");
-		//WeightLimit wl = new WeightLimit();
-		// char item, String bagNames
-		//  UnaryInclusive ui = new UnaryInclusive('A', "zy");
-		// UnaryInclusive ui = new UnaryInclusive('A', "x"); // false
-		// UnaryExclusive ue = new UnaryExclusive('A', "xz");
-		//BinaryNotEquals be = new BinaryNotEquals('A', 'B');
-		MutualInclusive mi = new MutualInclusive('A', 'B','y','x');
-		boolean valid = mi.isValid(testState);
-		
-		//boolean valid = wl.isValid(testState, testWeights, testCapacities);
-		System.out.println(valid);
+		ArrayList<State> next = nextStates(initialState);
 		
 		return false;
+		
 	}
 	
 	private int loadFile(String input_file) {
@@ -77,7 +85,6 @@ public class CSP_ACML {
 		bagCapacities = new HashMap<Character, Integer>();
 
 		constraints = new ArrayList<Constraint>();
-		constraints.add(new WeightLimit());
 				
 		String line;
 		String separator = "#####"; 
@@ -127,6 +134,8 @@ public class CSP_ACML {
 					break;
 				}
 			}
+			constraints.add(new WeightLimit(this.itemWeights, this.bagCapacities));
+
 		} catch (IOException e) {
 			System.out.println("Could Not Read Input File");
 			e.printStackTrace();
@@ -165,3 +174,41 @@ public class CSP_ACML {
 		return;
 	}
 }
+
+/*
+ *
+ Testing
+ 
+ 		HashMap<Character, String> testBags = new HashMap<Character, String>();		
+		HashMap<Character, Integer> testWeights = new HashMap<Character, Integer>();
+		HashMap<Character, Integer> testCapacities = new HashMap<Character, Integer>();
+ 
+testWeights.put('A', 95);
+testWeights.put('B', 6);
+testWeights.put('C', 1);
+
+testCapacities.put('x', 3);
+testCapacities.put('y', 7);
+testCapacities.put('z', 100);
+
+
+testBags.put('z', "C");
+testBags.put('y', "B");
+//testBags.put('z', "C");
+testBags.put('x', "");
+
+State testState = new State(testBags, "");
+//FittingLimit fl = new FittingLimit("1", "3");
+//WeightLimit wl = new WeightLimit();
+// char item, String bagNames
+//  UnaryInclusive ui = new UnaryInclusive('A', "zy");
+// UnaryInclusive ui = new UnaryInclusive('A', "x"); // false
+// UnaryExclusive ue = new UnaryExclusive('A', "xz");
+//BinaryNotEquals be = new BinaryNotEquals('A', 'B');
+MutualInclusive mi = new MutualInclusive('A', 'B','y','x');
+boolean valid = mi.isValid(testState);
+
+//boolean valid = wl.isValid(testState, testWeights, testCapacities);
+System.out.println(valid);
+*/
+

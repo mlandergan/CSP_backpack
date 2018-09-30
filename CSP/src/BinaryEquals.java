@@ -7,7 +7,16 @@ public class BinaryEquals extends Constraint {
         this.item2 = item2;
     }
 
-    public boolean isValid(State currentState){
+    
+    public boolean isSatisfiable(State currentState){    	
+        for(String items: currentState.getBags().values()) {
+        	if((items.indexOf(item1) != -1) && (items.indexOf(item2) != -1)) return false;
+        }
+        return true;
+    }
+    
+    
+    public boolean isValid(State currentState){    	
         if(currentState.getUnassignedItems().indexOf(item1) != -1 || currentState.getUnassignedItems().indexOf(item2) != -1 ) return false;
         
         for(String items: currentState.getBags().values()) {

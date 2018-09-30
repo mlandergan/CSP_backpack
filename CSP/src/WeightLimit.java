@@ -1,15 +1,27 @@
 import java.util.HashMap;
 
 public class WeightLimit extends Constraint {
-
-    public boolean isValid(State currentState){
-        boolean isValid = false;
-        //TODO Make sure each bag is holding a weight >=90% limit but < 100% (integer, rounded down)
-        return  isValid;
+	HashMap<Character, Integer> itemWeights;
+	HashMap<Character, Integer> bagCapacities;
+	
+	public WeightLimit(HashMap<Character, Integer> itemWeights, HashMap<Character, Integer> bagCapacities) {
+		this.itemWeights = itemWeights;
+		this.bagCapacities = bagCapacities;
+	}
+    
+    public boolean isSatisfiable(State currentState){    	
+    	HashMap<Character, String> bags = currentState.getBags();
+    	
+    	for (Character bag : bags.keySet()) {
+    		int maxCapacity = bagCapacities.get(bag);
+    		int currentWeight = getCurrentWeight(itemWeights, bags.get(bag));	
+    		if (currentWeight > maxCapacity) return false;
+    	}
+        return  true;
     }
     
-    public boolean isValid(State currentState, HashMap<Character, Integer> itemWeights, HashMap<Character, Integer> bagCapacities){
-    	
+    public boolean isValid(State currentState){
+    	    	
     	HashMap<Character, String> bags = currentState.getBags();
     	
     	for (Character bag : bags.keySet()) {
