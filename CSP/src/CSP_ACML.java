@@ -35,8 +35,8 @@ public class CSP_ACML {
     	// assign an item to the bag if constraints are valid
 		// forward checking (keep track of assigned variables
     	ArrayList<State> nextStates = new ArrayList<State>();
-    	for(Character b: currentState.getBags().keySet()) {
-    		for(Character c: currentState.getUnassignedItems().toCharArray()) {
+    	for(Character b: currentState.getBags().keySet()) {    		
+    		for(Character c: currentState.getBags().get(b).toCharArray()) {
     			State currCopy = new State(currentState);
     			currCopy.addItem(b, c);
     			
@@ -58,12 +58,7 @@ public class CSP_ACML {
     public boolean constraintsSatisfiable(State currentState) {
     	for(Constraint c: this.constraints) {
     		if(!c.isSatisfiable(currentState)) return false;
-    	}
-    	String s = "123";
-    	s.contains(Character.toString(('A')));
-    	
-    	
-    	
+    	}    	
     	return true;
     }
 	
