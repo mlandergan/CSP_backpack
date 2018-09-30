@@ -19,6 +19,8 @@ public class State {
     	if (this.unassignedItems.indexOf(item) == -1) return false;
     	String newVal = this.bags.get(bag) + Character.toString(item);
 		this.bags.put(bag, newVal);
+		int index = this.unassignedItems.indexOf(item);
+		this.unassignedItems = this.unassignedItems.substring(0, index) + this.unassignedItems.substring(index+1);
     	return true;
     }
 

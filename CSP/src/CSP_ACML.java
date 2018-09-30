@@ -14,17 +14,24 @@ public class CSP_ACML {
 	ArrayList<Constraint> constraints;
 	
 	
-	//private State backTracking(State currentState) {
+	private State backTracking(State currentState) {
 		// check valid solution 
-			// call constraintsValid method
-		// forward checking (keep track of assigned variables
+		if(currentState.getUnassignedItems().length() == 0 && constraintsValid(currentState)) {
+			return currentState;
+		}
+		
+		for (State state : nextStates(currentState)) {
+			State solution =  backTracking(state);
+			if (solution != null) return solution;
+		}
 		// nextStates from member function
 		// call backTracking return solution or NULL
-		
-	//}
+		return null;
+	}
 	
     public ArrayList<State> nextStates(State currentState){
     	// assign an item to the bag if constraints are valid
+		// forward checking (keep track of assigned variables
     	ArrayList<State> nextStates = new ArrayList<State>();
     	for(Character b: currentState.getBags().keySet()) {
     		for(Character c: currentState.getUnassignedItems().toCharArray()) {
@@ -40,6 +47,13 @@ public class CSP_ACML {
     }
     
     public boolean constraintsValid(State currentState) {
+    	if (currentState.getBags().get('a').contains(Character.toString('A')) && 
+    		currentState.getBags().get('b').contains(Character.toString('B')) && 
+    		currentState.getBags().get('b').contains(Character.toString('C')) && 
+    		currentState.getBags().get('b').contains(Character.toString('D'))) 
+    	{
+    		System.out.println("Found");
+    	}
     	for(Constraint c: this.constraints) {
     		if(!c.isValid(currentState)) return false;
     	}
@@ -47,21 +61,39 @@ public class CSP_ACML {
     }
      
     public boolean constraintsSatisfiable(State currentState) {
+	if (currentState.getBags().get('a').contains(Character.toString('A')) && 
+    		currentState.getBags().get('b').contains(Character.toString('B')) && 
+    		currentState.getBags().get('b').contains(Character.toString('C')) && 
+    		currentState.getBags().get('b').contains(Character.toString('D'))) 
+    	{
+    		System.out.println("Found");
+    	}
     	for(Constraint c: this.constraints) {
     		if(!c.isSatisfiable(currentState)) return false;
     	}
+    	String s = "123";
+    	s.contains(Character.toString(('A')));
+    	
+    	
+    	
     	return true;
     }
 	
-	private boolean findSolution() {
+	private State findSolution() {
 		
 	    String allItems = getItemString();
 		HashMap<Character, String> emptyBags = getEmptyBags();
 		State initialState = new State(emptyBags, allItems);
+				
+		return backTracking(initialState);
+		//State solution = null;
 		
-		ArrayList<State> next = nextStates(initialState);
-		
-		return false;
+		//for (State s : nextStates(initialState)) {
+			//State sol = backTracking(s);
+			
+		//	if (sol != null) return sol;
+		//}
+		//return null;
 		
 	}
 	
@@ -169,7 +201,7 @@ public class CSP_ACML {
 		int res = csp.loadFile(args[0]);
 		if (res == 0) return;
 		
-		csp.findSolution();
+		State solution = csp.findSolution();
 		
 		return;
 	}
