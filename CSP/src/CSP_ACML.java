@@ -36,7 +36,7 @@ public class CSP_ACML {
 		// forward checking (keep track of assigned variables
     	ArrayList<State> nextStates = new ArrayList<State>();
     	for(Character b: currentState.getBags().keySet()) {    		
-    		for(Character c: currentState.getBags().get(b).toCharArray()) {
+    		for(Character c: currentState.getUnassignedItems().toCharArray()) {
     			State currCopy = new State(currentState);
     			currCopy.addItem(b, c);
     			
@@ -235,7 +235,11 @@ public class CSP_ACML {
 		int res = csp.loadFile(args[0]);
 		if (res == 0) return;
 		
-		State solution = csp.findSolution();	
+		long start_time = System.nanoTime();
+		State solution = csp.findSolution();
+		long time_taken = System.nanoTime() - start_time;
+		
+		System.out.println(String.format("Time Taken: %dns", time_taken));
 		csp.saveOutput(solution, output_file);
 		return;
 	}
